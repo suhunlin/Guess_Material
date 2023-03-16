@@ -20,7 +20,11 @@ class SecretNumber {
         }else if(randomNumber<userInput){
             return "Smaller!!!"
         }else{
-            return "You got it!!!"
+            if(count < 3){
+                return "Excellent! The number is $randomNumber"
+            }else {
+                return "You got it!!!"
+            }
         }
     }
 
