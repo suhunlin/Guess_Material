@@ -1,17 +1,22 @@
 package com.suhun.guessmaterial
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.suhun.guessmaterial.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    var tag = MainActivity::class.simpleName
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var secretNumber:SecretNumber = SecretNumber()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        Log.d(tag, "secret number:${secretNumber.randomNumber}")
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -41,5 +47,14 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun runGuess(view: View){
+        var message:String = secretNumber
+            .verify(resources, binding.contentLayout.userInput.text.toString().toInt())
+        AlertDialog.Builder(this)
+            .setTitle("Guess message").setMessage(message)
+            .setPositiveButton("ok", null)
+            .show()
     }
 }
