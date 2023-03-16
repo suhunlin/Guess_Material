@@ -1,5 +1,6 @@
 package com.suhun.guessmaterial
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
@@ -61,10 +62,20 @@ class MainActivity : AppCompatActivity() {
     fun runGuess(view: View){
         var message:String = secretNumber
             .verify(resources, binding.contentLayout.userInput.text.toString().toInt())
+        var guessResult:Boolean = if(message.equals("You got it!!!")
+            || message.equals("Excellent! The number is ${secretNumber.randomNumber}"))
+            true else false
         binding.contentLayout.guessCount.text = secretNumber.count.toString()
         AlertDialog.Builder(this)
             .setTitle("Guess message").setMessage(message)
-            .setPositiveButton("ok", null)
+            .setPositiveButton("ok", {dialog, which->
+                if(guessResult){
+                    val intent:Intent = Intent(this, RecordActivity::class.java)
+                    intent.putExtra("COUNT", secretNumber.count)
+                    startActivity(intent)
+                }
+
+            })
             .show()
     }
 }
