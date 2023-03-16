@@ -28,8 +28,17 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "secret number:${secretNumber.randomNumber}")
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            AlertDialog.Builder(this)
+                .setTitle("Replay game")
+                .setMessage("Are you sure?")
+                .setPositiveButton("ok", {dialog, which ->
+                    secretNumber.resetAll()
+                    binding.contentLayout.userInput.text = null
+                    binding.contentLayout.userInput.hint = "0"
+                    binding.contentLayout.guessCount.text = "0"
+                })
+                .setNeutralButton("Cancel", null)
+                .show()
         }
     }
 
@@ -52,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     fun runGuess(view: View){
         var message:String = secretNumber
             .verify(resources, binding.contentLayout.userInput.text.toString().toInt())
+        binding.contentLayout.guessCount.text = secretNumber.count.toString()
         AlertDialog.Builder(this)
             .setTitle("Guess message").setMessage(message)
             .setPositiveButton("ok", null)
